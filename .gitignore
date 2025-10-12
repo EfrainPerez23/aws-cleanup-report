@@ -1,0 +1,28 @@
+# Terraform directories
+.terraform/
+.terraform.tfstate.lock.info
+
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variable files (if contain secrets)
+*.tfvars
+*.tfvars.json
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lambda or other build artifacts
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
