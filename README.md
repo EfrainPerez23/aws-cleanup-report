@@ -15,7 +15,7 @@ It helps you identify unused or underutilized resources and store the report in 
 
 ```hcl
 module "aws_cleanup_report" {
-  source = "git::https://github.com/yourusername/aws_cleanup_report.git"
+  source = "git::https://github.com/EfrainPerez23/aws-cleanup-report.git"
 
   bucket_name              = "report-cleaner-bucket"
   lambda_schedule          = "rate(1 day)"
