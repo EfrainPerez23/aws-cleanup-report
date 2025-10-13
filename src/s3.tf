@@ -1,14 +1,10 @@
 resource "aws_s3_bucket" "report_cleanup_bucket" {
   bucket = var.aws_s3_bucket_name
   tags_all = {
-    porpose = "report_cleanup_bucket"
+    porpose = local.porpose
   }
 
   object_lock_enabled = var.object_lock_enabled
-
-  lifecycle {
-    ignore_changes = [tags_all, tags]
-  }
 }
 
 resource "aws_s3_bucket_versioning" "report_cleanup_bucket_versioning" {
