@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current_identity" {}
+
 data "aws_iam_policy_document" "report_cleanup_bucket_policy_document" {
   statement {
     sid    = "DenyUnencryptedTraffic"
@@ -41,6 +43,43 @@ data "aws_iam_policy_document" "lambda_trust_policy" {
     actions = ["sts:AssumeRole"]
   }
 }
+
+data "aws_iam_policy_document" "scheduler_trust_policy" {
+  statement {
+
+    sid    = "AllowSchedulerToAssumeRole"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["scheduler.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current_identity.account_id]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "scheduler_execution_permissions" {
+  statement {
+    sid    = "AllowSchedulerToInvokeLambda"
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction"
+    ]
+    resources = [
+      "${aws_lambda_function.aws_cleanup_report_lambda.arn}:*",
+      aws_lambda_function.aws_cleanup_report_lambda.arn
+    ]
+  }
+}
+
+
 
 
 data "aws_iam_policy_document" "lambda_execution_permissions" {
