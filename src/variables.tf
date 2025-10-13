@@ -18,7 +18,6 @@ variable "bucket_versioning_enabled" {
   default = false
 }
 
-
 variable "retention_logs_days" {
   type    = number
   default = 3

@@ -66,7 +66,9 @@ data "aws_iam_policy_document" "lambda_execution_permissions" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
-    resources = [aws_cloudwatch_log_group.lambda_aws_cleanup_report_log_group.arn]
+    resources = [
+      "${aws_cloudwatch_log_group.lambda_aws_cleanup_report_log_group.arn}:*"
+    ]
   }
 }
 
@@ -75,4 +77,3 @@ data "archive_file" "lambda_function_zip" {
   source_file = "lambda/lambda_function.py"
   output_path = "lambda/function.zip"
 }
-
