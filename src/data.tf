@@ -1,6 +1,7 @@
 data "aws_caller_identity" "current_identity" {}
 
 data "aws_iam_policy_document" "report_cleanup_bucket_policy_document" {
+  version = local.aws_policy_version
   statement {
     sid    = "DenyUnencryptedTraffic"
     effect = "Deny"
@@ -30,6 +31,7 @@ data "aws_iam_policy_document" "report_cleanup_bucket_policy_document" {
 }
 
 data "aws_iam_policy_document" "lambda_trust_policy" {
+  version = local.aws_policy_version
   statement {
 
     sid    = "AllowLambdaToAssumeRole"
@@ -45,6 +47,7 @@ data "aws_iam_policy_document" "lambda_trust_policy" {
 }
 
 data "aws_iam_policy_document" "scheduler_trust_policy" {
+  version = "2012-10-17"
   statement {
 
     sid    = "AllowSchedulerToAssumeRole"
@@ -66,6 +69,7 @@ data "aws_iam_policy_document" "scheduler_trust_policy" {
 }
 
 data "aws_iam_policy_document" "scheduler_execution_permissions" {
+  version = local.aws_policy_version
   statement {
     sid    = "AllowSchedulerToInvokeLambda"
     effect = "Allow"
@@ -83,6 +87,7 @@ data "aws_iam_policy_document" "scheduler_execution_permissions" {
 
 
 data "aws_iam_policy_document" "lambda_execution_permissions" {
+  version = local.aws_policy_version
   statement {
     sid    = "AllowS3Access"
     effect = "Allow"
