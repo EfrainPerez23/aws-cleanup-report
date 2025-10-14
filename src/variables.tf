@@ -18,7 +18,6 @@ variable "bucket_versioning_enabled" {
   default = false
 }
 
-
 variable "retention_logs_days" {
   type    = number
   default = 3
@@ -34,13 +33,28 @@ variable "lambda_policy_name" {
   default = "aws-report-lambda-cleanup-policy"
 }
 
+variable "scheduler_name" {
+  type    = string
+  default = "aws-report-scheduler-cleanup"
+}
+
 variable "lambda_role_name" {
   type    = string
   default = "aws-report-lambda-cleanup-role"
+}
+
+variable "scheduler_role_name" {
+  type    = string
+  default = "aws-report-scheduler-cleanup-role"
 }
 
 variable "lambda_log_group_name" {
   type    = string
   default = "/custom/lambda/aws-report-cleanup"
 
+}
+
+variable "schedule_expression" {
+  type    = string
+  default = "rate(1 minutes)"
 }
