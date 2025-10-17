@@ -1,6 +1,7 @@
 from typing import TypedDict
+from datetime import datetime
 
 
 class S3Bucket(TypedDict):
     Name: str
-    CreationDate: str
+    CreationDate: datetime | str
