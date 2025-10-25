@@ -10,7 +10,7 @@ terraform.tfstate.backup
 crash.log
 crash.*.log
 
-# Variable files (if contain secrets)
+# Variable files
 *.tfvars
 *.tfvars.json
 
@@ -26,3 +26,42 @@ override.tf.json
 # OS files
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pyi
+*.env
+*.venv
+.venv/
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg
+*.egg-info/
+dist/
+build/
+*.pytest_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Nix
+result/
+*.drv
+*.drv.lock
+*.nar
+*.lock
+.venv/
+.nix-channels
+.nix-profile
+/nix

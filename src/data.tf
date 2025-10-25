@@ -94,12 +94,10 @@ data "aws_iam_policy_document" "lambda_execution_permissions" {
     actions = [
       "s3:PutObject",
       "s3:GetObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:ListAllMyBuckets"
     ]
-    resources = [
-      aws_s3_bucket.report_cleanup_bucket.arn,
-      "${aws_s3_bucket.report_cleanup_bucket.arn}/*"
-    ]
+    resources = ["*"]
   }
 
   statement {
@@ -118,6 +116,6 @@ data "aws_iam_policy_document" "lambda_execution_permissions" {
 
 data "archive_file" "lambda_function_zip" {
   type        = "zip"
-  source_file = "lambda/lambda_function.py"
-  output_path = "lambda/function.zip"
+  source_dir  = "lambda/"
+  output_path = "function.zip"
 }

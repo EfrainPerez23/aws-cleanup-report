@@ -22,6 +22,7 @@ resource "aws_iam_role_policy_attachment" "scheduler_custom_policy_attachment" {
 resource "aws_scheduler_schedule" "aws_clenaup_report_scheduler" {
   name                = "aws-clenaup-report-scheduler"
   description         = "Schedule for AWS Cleanup Report"
+  state               = "DISABLED"
   schedule_expression = var.schedule_expression
 
 
