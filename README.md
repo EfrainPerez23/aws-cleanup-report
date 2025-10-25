@@ -1,15 +1,18 @@
 # AWS Cleanup Report Module
 
-This Terraform module automates the process of generating cleanup reports for AWS resources.  
-It helps you identify unused or underutilized resources and store the report in an S3 bucket.  
+This Terraform module automates the detection and reporting of insecure or unused S3 buckets.  
+It generates a **CSV report** listing **S3 buckets that are empty** and **do not have an HTTPS-only (deny HTTP) policy enforced**.
 
 ## Features
 
-- Creates an **S3 bucket** for storing CSV cleanup reports.
-- Configures a **bucket policy** to enforce HTTPS-only access.
-- Enables **versioning** for the S3 bucket (optional).
-- Deploys a **Lambda function** that generates the report.
-- Schedules the Lambda using **EventBridge** (CloudWatch Events) with a configurable cron expression.
+- Creates an **S3 bucket** to store the generated cleanup CSV reports.
+- Deploys a **Lambda function** that:
+  - Scans all existing S3 buckets in the account.
+  - Identifies buckets **without an HTTPS deny policy**.
+  - Detects buckets that are **empty (no objects stored)**.
+  - Generates a **CSV report** summarizing those buckets.
+  - Uploads the report automatically to the configured S3 bucket.
+- Uses **EventBridge (CloudWatch Events)** to schedule the Lambda on a defined interval (e.g., daily).
 
 ## Usage
 
@@ -17,12 +20,11 @@ It helps you identify unused or underutilized resources and store the report in 
 module "aws_cleanup_report" {
   source = "git::https://github.com/EfrainPerez23/aws-cleanup-report.git"
 
-  bucket_name              = "report-cleaner-bucket"
-  lambda_schedule          = "rate(1 day)"
+  bucket_name               = "report-cleaner-bucket"
+  lambda_schedule           = "rate(1 day)"
   bucket_versioning_enabled = true
 }
 ```
-
 
 ## Running with Nix Flake
 
