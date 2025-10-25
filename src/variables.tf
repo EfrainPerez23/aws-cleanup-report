@@ -56,5 +56,5 @@ variable "lambda_log_group_name" {
 
 variable "schedule_expression" {
   type    = string
-  default = "rate(1 minutes)"
+  default = "rate(30 days)"
 }
