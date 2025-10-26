@@ -3,13 +3,14 @@ from logger import LOGGER
 from s3 import S3Reporter
 
 
-def _generate_s3_report() -> Dict:
+def _generate_s3_report() -> str:
     s3_reporter = S3Reporter()
     s3_report: Final[Dict] = {
         "empty": s3_reporter.get_empty_s3_buckets(),
         "no_http": s3_reporter.get_no_deny_http_access_buckets(),
     }
-    return s3_report
+    s3_reporter.generate_s3_report(s3_report)
+    return "Report generated"
 
 
 def lambda_handler(_: Dict, __) -> Dict[str, int | str]:
