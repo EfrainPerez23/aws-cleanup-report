@@ -1,3 +1,5 @@
+from csv import DictWriter
+from io import StringIO
 from boto3 import client
 from boto3.session import Session
 from typing import Final, Dict, List
@@ -5,6 +7,8 @@ from models.s3 import S3Bucket
 from datetime import datetime
 from botocore.exceptions import ClientError
 from json import loads
+from logger import LOGGER
+from os import getenv
 
 s3_client: Final[Session] = client("s3")
 
@@ -69,3 +73,29 @@ class S3Reporter:
             Bucket=bucket_name, MaxKeys=1
         )
         return s3_content.get("KeyCount", 0) == 0
+
+    def generate_s3_report(self, to_report: Dict[str, List[Dict]]) -> None:
+        assert to_report, "Report cannot be empty"
+        assert isinstance(to_report, dict), "Report must be a dictionary"
+
+        for report_type, report_content in to_report.items():
+            if not report_content:
+                LOGGER.info(f"No {report_type} to report")
+                continue
+
+            headers: Final = report_content[0].keys()
+
+            csv_buffer: Final[StringIO] = StringIO()
+            writer: Final[DictWriter[str]] = DictWriter(csv_buffer, fieldnames=headers)
+            writer.writeheader()
+            writer.writerows(report_content)
+
+            s3_client.put_object(
+                Body=csv_buffer.getvalue(),
+                Bucket=getenv("REPORT_BUCKET_NAME", "report-cleaner-bucket"),
+                Key=f"{report_type}.csv",
+                ContentType="text/csv",
+                ACL="bucket-owner-full-control",
+            )
+
+            LOGGER.info(f"Report {report_type} generated")
