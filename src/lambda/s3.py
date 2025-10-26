@@ -9,6 +9,7 @@ from botocore.exceptions import ClientError
 from json import loads
 from logger import LOGGER
 from os import getenv
+from datetime import datetime
 
 s3_client: Final[Session] = client("s3")
 
@@ -78,22 +79,29 @@ class S3Reporter:
         assert to_report, "Report cannot be empty"
         assert isinstance(to_report, dict), "Report must be a dictionary"
 
+        now: Final[datetime] = datetime.now()
+
+        year: Final[str] = now.strftime("%Y")
+        month: Final[str] = now.strftime("%m")
+        day: Final[str] = now.strftime("%d")
+        hour_str: Final[str] = now.strftime("%H%M%S")
+
         for report_type, report_content in to_report.items():
             if not report_content:
                 LOGGER.info(f"No {report_type} to report")
                 continue
 
-            headers: Final = report_content[0].keys()
+            headers = report_content[0].keys()
 
-            csv_buffer: Final[StringIO] = StringIO()
-            writer: Final[DictWriter[str]] = DictWriter(csv_buffer, fieldnames=headers)
+            csv_buffer: StringIO = StringIO()
+            writer: DictWriter[str] = DictWriter(csv_buffer, fieldnames=headers)
             writer.writeheader()
             writer.writerows(report_content)
 
             s3_client.put_object(
                 Body=csv_buffer.getvalue(),
                 Bucket=getenv("REPORT_BUCKET_NAME", "report-cleaner-bucket"),
-                Key=f"{report_type}.csv",
+                Key=f"{year}/{month}/{day}/{report_type}_{hour_str}.csv",
                 ContentType="text/csv",
                 ACL="bucket-owner-full-control",
             )
