@@ -1,0 +1,8 @@
+# .terraformignore
+flake.nix
+flake.lock
+requirements.txt
+*.zip
+*.tar.gz
+.github/
+.git/
