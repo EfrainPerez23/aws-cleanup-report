@@ -1,0 +1,5 @@
+flake.nix export-ignore
+flake.lock export-ignore
+requirements.txt export-ignore
+.gitignore export-ignore
+.terraform.lock.hcl export-ignore
