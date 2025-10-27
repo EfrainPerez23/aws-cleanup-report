@@ -116,6 +116,6 @@ data "aws_iam_policy_document" "lambda_execution_permissions" {
 
 data "archive_file" "lambda_function_zip" {
   type        = "zip"
-  source_dir  = "lambda/"
-  output_path = "function.zip"
+  source_dir  = "${path.module}/lambda/"
+  output_path = "${path.module}/function.zip"
 }
